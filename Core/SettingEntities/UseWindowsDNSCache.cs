@@ -1,10 +1,12 @@
-﻿namespace Core.SettingEntities
+﻿using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
 {
     public class UseWindowsDNSCache : BooleanSettingEntity, ISettingEntity
     {
-        public UseWindowsDNSCache() { }
+        public UseWindowsDNSCache() : base(true) { }
 
-        public UseWindowsDNSCache(bool isEnabled)
+        public UseWindowsDNSCache(bool isEnabled) : base(false)
         {
             Value = isEnabled;
         }

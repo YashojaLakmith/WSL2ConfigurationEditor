@@ -1,24 +1,28 @@
-﻿using Core.Attributes;
+﻿using Core.Abstractions.Entity;
+using Core.Attributes;
 using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
     [Setting(@"processors", SectionType.Common, @"Allocated Processors")]
     [SupportedWindowsVersion(10)]
-    public class AllocatedProcessors : ISettingEntity
+    public class AllocatedProcessors : BaseDefaultableEntity, ISettingEntity
     {
-        public int ProcessorCount { get; private set; }
+        public uint ProcessorCount { get; private set; }
 
-        public AllocatedProcessors() { }
+        public AllocatedProcessors(): base(true) { }
 
-        public AllocatedProcessors(int processorCount)
+        public AllocatedProcessors(uint processorCount): base(false)
         {
             ProcessorCount = processorCount;
         }
 
         public void SetValue(string valueAsString)
         {
-            ProcessorCount = TryParseStringAsInt(valueAsString);
+            var count = TryParseStringAsInt(valueAsString);
+            ValidateProcessorCount(count);
+            ProcessorCount = count;
+            IsDefault &= false;
         }
 
         public string ParseValueAsString()
@@ -26,14 +30,33 @@ namespace Core.SettingEntities
             return ProcessorCount.ToString();
         }
 
-        private static int TryParseStringAsInt(ReadOnlySpan<char> valueAsString)
+        private static uint TryParseStringAsInt(ReadOnlySpan<char> valueAsString)
         {
             if(uint.TryParse(valueAsString, out var result))
             {
-                return (int) result;
+                return result;
             }
 
-            throw new InvalidOperationException();
+            throw new FormatException(@"Value should be a unsigned numeric value.");
+        }
+
+        private static void ValidateProcessorCount(uint processorCount)
+        {
+            var sysCount = GetProcessorCount();
+            if(processorCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(@"Processor count should not be less than 1");
+            }
+
+            if(processorCount > sysCount)
+            {
+                throw new ArgumentOutOfRangeException(@"Processor count should not be greater than available logical processors in the system.");
+            }
+        }
+
+        private static uint GetProcessorCount()
+        {
+            return (uint)Environment.ProcessorCount;
         }
     }
 }

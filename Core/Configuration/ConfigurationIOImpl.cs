@@ -1,4 +1,5 @@
-﻿using Core.SystemInterfaces;
+﻿using Core.Abstractions.Configuration;
+using Core.Abstractions.System;
 
 namespace Core.Configuration;
 
@@ -7,14 +8,15 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
     private readonly IConfigurationState _state = state;
     private readonly IFileIO _fileIO = fileIO;
 
-    public async Task LoadConfigurationFromFileAsync(CancellationToken cancellationToken = default)
+    public async Task LoadConfigurationFromFileAsync(CancellationToken cancellationToken = default)     // Needs to handle exceptions
     {
         var lines = await _fileIO.ReadLinesFromFileAsync(cancellationToken);
         VerifyWsl2Tag(lines);
-        _state.LoadConfiguration(lines);
+        var idx = FindIndexOfWsl2Tag(lines);
+        _state.LoadConfiguration(lines.Skip(idx + 1));
     }
 
-    public async Task SaveConfigurationToFileAsync(CancellationToken cancellationToken = default)
+    public async Task SaveConfigurationToFileAsync(CancellationToken cancellationToken = default)       // Needs to handle exceptions
     {
         IEnumerable<string> lines = _state.ParseAsConfigLines();
         try
@@ -38,7 +40,7 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
     {
         if(!lines.Any())
         {
-            throw new InvalidDataException();
+            throw new InvalidDataException(@"File does not conatain valid .wslconfig data.");
         }
 
         foreach(var line in lines)
@@ -48,10 +50,28 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
                 continue;
             }
 
-            if (!line.Equals(@"[wsl2]"))
+            if (line.Equals(@"[wsl2]"))
             {
-                throw new InvalidDataException();
+                return;
             }
+
+            throw new InvalidDataException(@"File does not conatain valid .wslconfig data.");
         }
+    }
+
+    private static int FindIndexOfWsl2Tag(IEnumerable<string> lines)
+    {
+        var i = 0;
+        foreach (var item in lines)
+        {
+            if (item.Equals(@"[wsl2]"))
+            {
+                break;
+            }
+
+            i++;
+        }
+
+        return i;
     }
 }

@@ -1,10 +1,12 @@
-﻿namespace Core.SettingEntities
+﻿using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
 {
     public class DNSProxy : BooleanSettingEntity, ISettingEntity
     {
-        public DNSProxy() { }
+        public DNSProxy(): base(true) { }
 
-        public DNSProxy(bool isEnabled)
+        public DNSProxy(bool isEnabled): base(false)
         {
             Value = isEnabled;
         }

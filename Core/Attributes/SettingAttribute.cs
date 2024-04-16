@@ -1,5 +1,4 @@
 ﻿using Core.Enumerations;
-using Core.Extensions;
 
 namespace Core.Attributes;
 
@@ -13,7 +12,7 @@ public class SettingAttribute : Attribute
     public SettingAttribute(string settingKey, SectionType sectionName, string commonName = @"")
     {
         SettingKey = settingKey;
-        Section = sectionName.ToLowerCaseString();
+        Section = sectionName.ToString().ToLower();
 
         if (string.IsNullOrWhiteSpace(commonName) || commonName.Equals(string.Empty))
         {

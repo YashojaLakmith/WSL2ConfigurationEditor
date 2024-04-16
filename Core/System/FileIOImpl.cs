@@ -1,6 +1,8 @@
 ﻿using System.Security.AccessControl;
 using System.Security.Principal;
 
+using Core.Abstractions.System;
+
 namespace Core.SystemInterfaces;
 
 public class FileIOImpl : IFileIO
@@ -18,9 +20,9 @@ public class FileIOImpl : IFileIO
             var path = GetWslConfigWin32Path();
             return await File.ReadAllLinesAsync(path, cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new IOException(ex.Message);
+            throw new IOException(@"Unable to read from .wslconfig file.");
         }
     }
 
@@ -38,10 +40,17 @@ public class FileIOImpl : IFileIO
             var path = GetWslConfigWin32Path();
             await File.WriteAllLinesAsync(path, lines, cancellationToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new IOException(ex.Message);
+            throw new IOException(@"Unable to write to the .wslconfig file.");
         }
+    }
+
+    public async Task CreateEmptyWslConfigFileAsync(CancellationToken cancellationToken = default)
+    {
+        string[] lines = [@"[wsl2]"];
+        var path = GetWslConfigWin32Path();
+        await File.WriteAllLinesAsync(path, lines, cancellationToken);
     }
 
     private static string GetWslConfigWin32Path()
@@ -62,7 +71,13 @@ public class FileIOImpl : IFileIO
 
     private static bool HasRequiredPermissions(IEnumerable<FileSystemAccessRule> rules)
     {
-        return rules.Where(r => r.FileSystemRights == FileSystemRights.Modify)
+        return rules.Where(FileSystemRightPredicate)
             .Any();
+    }
+
+    private static bool FileSystemRightPredicate(FileSystemAccessRule rule)
+    {
+        return rule.FileSystemRights == FileSystemRights.FullControl
+            || rule.FileSystemRights == FileSystemRights.Modify;
     }
 }

@@ -1,8 +1,10 @@
 ﻿namespace Core.SettingEntities;
 
-public abstract class BooleanSettingEntity
+public abstract class BooleanSettingEntity : BaseDefaultableEntity
 {
     public bool Value { get; protected set; }
+
+    public BooleanSettingEntity(bool isDefault): base(isDefault) { }
 
     public string ParseValueAsString()
     {
@@ -12,15 +14,16 @@ public abstract class BooleanSettingEntity
     public void SetValue(string valueAsString)
     {
         Value = TryParseStringAsBool(valueAsString);
+        IsDefault &= false;
     }
 
-    private static bool TryParseStringAsBool(ReadOnlySpan<char> valueAsString)
+    private static bool TryParseStringAsBool(string valueAsString)
     {
-        if(bool.TryParse(valueAsString, out var result))
+        if(bool.TryParse(valueAsString.ToLower(), out var result))
         {
             return result;
         }
 
-        throw new InvalidOperationException();
+        throw new FormatException(@"The value should either be 'true' or 'false'.");
     }
 }

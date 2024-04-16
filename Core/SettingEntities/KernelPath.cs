@@ -1,43 +1,71 @@
-﻿namespace Core.SettingEntities
-{
-    public class KernelPath
-    {
-        private const string KeyName = @"kernel";
-        public string KernelPathWin32Format { get; private set; }
+﻿using System.Text;
 
-        public KeyValuePair<string, string> ParseIntoKeyValuePair()
+using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
+{
+    public class KernelPath : BaseDefaultableEntity, ISettingEntity
+    {
+        public string PathToKernel { get; private set; }
+
+        public KernelPath() : base(true)
         {
-            if (string.IsNullOrEmpty(KernelPathWin32Format))
+            PathToKernel = string.Empty;
+        }
+
+        public KernelPath(string path) : base(false)
+        {
+            ValidateWin32Path(path);
+            PathToKernel = path;
+        }
+
+        public string ParseValueAsString()
+        {
+            return PathToKernel.Replace(@"\", @"\\");
+        }
+
+        public void SetValue(string valueAsString)
+        {
+            ValidateWin32Path(valueAsString);
+            PathToKernel = valueAsString;
+            IsDefault &= false;
+        }
+
+        private static void ValidateWin32Path(string path)
+        {
+            string file;
+            string? dir;
+
+            if (string.IsNullOrWhiteSpace(path) || path.Equals(string.Empty))
             {
-                return new KeyValuePair<string, string>();
+                throw new FormatException(@"Path should not be empty string or a string containing only whitespace characters.");
             }
 
-            return KeyValuePair.Create(KeyName, KernelPathWin32Format);
-        }
+            try
+            {
+                file = Path.GetFileName(path);
+                dir = Path.GetDirectoryName(path);
+            }
+            catch (ArgumentException)
+            {
+                throw new FormatException(@"Path contains one or more invalid characters. Given path should be a valid Win32 path.");
+            }
+            catch (PathTooLongException)
+            {
+                throw new FormatException(@"Path contains characters more than the system defined limit.");
+            }
 
-        public void SetKernelPath(string path)
-        {
-            KernelPathWin32Format = path;
-        }
+            if(!Path.IsPathRooted(file))
+            {
+                throw new FormatException(@"Path should be an absolute Win32 path");
 
-        public static KernelPath Create(string valueString)
-        {
-            return new(valueString);
-        }
+            }
 
-        public static KernelPath Create()
-        {
-            return new();
-        }
-
-        private KernelPath(string kernelPath)
-        {
-            KernelPathWin32Format = kernelPath;
-        }
-
-        private KernelPath()
-        {
-            KernelPathWin32Format = string.Empty;
+            var invalidFileNameChars = Path.GetInvalidFileNameChars();
+            if (invalidFileNameChars.Intersect(file).Any() || path.Contains('/'))
+            {
+                throw new FormatException(@"File name contains invalid characters. File name should be a valid Win32 name.");
+            }
         }
     }
 }

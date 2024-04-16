@@ -1,10 +1,12 @@
-﻿namespace Core.SettingEntities
+﻿using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
 {
     public class SparseVHD : BooleanSettingEntity, ISettingEntity
     {
-        public SparseVHD() { }
+        public SparseVHD() : base(true) { }
 
-        public SparseVHD(bool isAvctive)
+        public SparseVHD(bool isAvctive) : base(false)
         {
             Value = isAvctive;
         }

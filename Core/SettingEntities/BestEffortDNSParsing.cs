@@ -1,10 +1,12 @@
-﻿namespace Core.SettingEntities
+﻿using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
 {
     public class BestEffortDNSParsing : BooleanSettingEntity, ISettingEntity
     {
-        public BestEffortDNSParsing() { }
+        public BestEffortDNSParsing(): base(true) { }
 
-        public BestEffortDNSParsing(bool isEnabled)
+        public BestEffortDNSParsing(bool isEnabled): base(false)
         {
             Value = isEnabled;
         }

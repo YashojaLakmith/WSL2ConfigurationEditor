@@ -1,35 +1,14 @@
-﻿
+﻿using Core.Abstractions.Entity;
+
 namespace Core.SettingEntities
 {
-    public class AutoProxy : ISettingEntity
+    public class AutoProxy : BooleanSettingEntity, ISettingEntity
     {
-        public bool IsEnabled { get; private set; }
+        public AutoProxy(): base(true) { }
 
-        public AutoProxy() { }
-
-        public AutoProxy(bool isEnabled)
+        public AutoProxy(bool isEnabled): base(false)
         {
-            IsEnabled = isEnabled;
-        }
-
-        public void SetValue(string valueAsString)
-        {
-            IsEnabled = TryParseStringToBool(valueAsString);
-        }
-
-        public string ParseValueAsString()
-        {
-            return IsEnabled.ToString().ToLower();
-        }
-
-        private static bool TryParseStringToBool(ReadOnlySpan<char> valueAsString)
-        {
-            if(bool.TryParse(valueAsString, out var result))
-            {
-                return result;
-            }
-
-            throw new InvalidOperationException();
+            Value = isEnabled;
         }
     }
 }

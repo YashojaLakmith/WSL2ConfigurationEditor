@@ -1,15 +1,15 @@
-﻿using Core.Enumerations;
-using Core.Extensions;
+﻿using Core.Abstractions.Entity;
+using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
-    public class AutoMemoryReclaim : ISettingEntity
+    public class AutoMemoryReclaim : BaseDefaultableEntity, ISettingEntity
     {
         public MemoryReclaimType ReclaimType { get; private set; }
 
-        public AutoMemoryReclaim() { }
+        public AutoMemoryReclaim(): base(true) { }
 
-        public AutoMemoryReclaim(MemoryReclaimType reclaimType)
+        public AutoMemoryReclaim(MemoryReclaimType reclaimType): base(false)
         {
             ReclaimType = reclaimType;
         }
@@ -17,6 +17,7 @@ namespace Core.SettingEntities
         public void SetValue(string valueAsString)
         {
             ReclaimType = MatchType(valueAsString);
+            IsDefault &= false;
         }
 
         public string ParseValueAsString()
@@ -36,12 +37,13 @@ namespace Core.SettingEntities
                 return MemoryReclaimType.DropCache;
             }
 
-            throw new InvalidOperationException();
+            throw new FormatException(@"Value should either be 'gradual' or 'dropcache'");
         }
 
         private static bool CheckEquality(MemoryReclaimType type, string  valueAsString)
         {
-            return type.ToLowerCaseString().Equals(valueAsString);
+            return type.ToString()
+                .Equals(valueAsString, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

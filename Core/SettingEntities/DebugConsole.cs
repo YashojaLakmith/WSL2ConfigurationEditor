@@ -1,10 +1,12 @@
-﻿namespace Core.SettingEntities
+﻿using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
 {
     public class DebugConsole : BooleanSettingEntity, ISettingEntity
     {
-        public DebugConsole() { }
+        public DebugConsole(): base(true) { }
 
-        public DebugConsole(bool isEnabled)
+        public DebugConsole(bool isEnabled): base(false)
         {
             Value = isEnabled;
         }

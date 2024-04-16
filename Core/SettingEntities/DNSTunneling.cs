@@ -1,10 +1,12 @@
-﻿namespace Core.SettingEntities
+﻿using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
 {
     public class DNSTunneling : BooleanSettingEntity, ISettingEntity
     {
-        public DNSTunneling() { }
+        public DNSTunneling(): base(true) { }
 
-        public DNSTunneling(bool isEnabled)
+        public DNSTunneling(bool isEnabled): base(false)
         {
             Value = isEnabled;
         }

@@ -1,10 +1,12 @@
-﻿namespace Core.SettingEntities
+﻿using Core.Abstractions.Entity;
+
+namespace Core.SettingEntities
 {
     public class GUIApplications : BooleanSettingEntity, ISettingEntity
     {
-        public GUIApplications() { }
+        public GUIApplications() : base(true) { }
 
-        public GUIApplications(bool isEnabled)
+        public GUIApplications(bool isEnabled) : base(false)
         {
             Value = isEnabled;
         }
