@@ -2,6 +2,9 @@
 
 namespace Core.Abstractions.Configuration;
 
+/// <summary>
+/// Defines methods to perform various operations on the in-memory representation of the WSL2 configuration.
+/// </summary>
 public interface IConfigurationState
 {
     /// <summary>

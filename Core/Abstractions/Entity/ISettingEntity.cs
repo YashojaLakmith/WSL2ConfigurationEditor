@@ -1,5 +1,8 @@
 ﻿namespace Core.Abstractions.Entity;
 
+/// <summary>
+/// Defines behavior for all strongly typed setting entities must implement.
+/// </summary>
 public interface ISettingEntity
 {
     public bool IsDefault { get; }

@@ -1,5 +1,8 @@
 ﻿namespace Core.Abstractions.System;
 
+/// <summary>
+/// Defines methods for working with .wslconfig file.
+/// </summary>
 public interface IFileIO
 {
     /// <summary>

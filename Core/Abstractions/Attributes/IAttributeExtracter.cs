@@ -1,5 +1,8 @@
 ﻿namespace Core.Abstractions.Attributes;
 
+/// <summary>
+/// Defines methods to get custom attributes associated with types.
+/// </summary>
 public interface IAttributeExtracter
 {
     /// <summary>

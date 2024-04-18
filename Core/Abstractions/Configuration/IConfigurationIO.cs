@@ -1,5 +1,8 @@
 ﻿namespace Core.Abstractions.Configuration;
 
+/// <summary>
+/// Defines methods to read and write configuration to and from disk.
+/// </summary>
 public interface IConfigurationIO
 {
     /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace Core.Abstractions.System;
 
+/// <summary>
+/// Defines methods for working with system provided services.
+/// </summary>
 public interface ISystemInterfaces
 {
     /// <summary>
