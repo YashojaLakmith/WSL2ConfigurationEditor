@@ -1,20 +1,14 @@
 ﻿using CLI.ConsoleInterface;
-using CLI.Events;
 using CLI.InputHandlers;
-
-using Core.Abstractions.Configuration;
-using Core.Abstractions.System;
 
 namespace CLI.Startup;
 
-public class AppLifetimeImpl(IConfigurationIO stateIo, IFileIO fileIO, IInputParser parser, IConsoleWritter writter) : IDisposable, IAppLifetime
+public class AppLifetimeImpl(IInputParser parser, IConsoleWritter writter) : IDisposable, IAppLifetime
 {
     private readonly IInputParser _parser = parser;
     private readonly IConsoleWritter _writter = writter;
     private readonly CancellationTokenSource _tokenSource = new();
     private bool disposedValue;
-
-    public event EventHandler<ConsoleInputEventArgs>? ConsoleInput;
 
     public async Task StartLoopAsync()
     {
@@ -39,7 +33,7 @@ public class AppLifetimeImpl(IConfigurationIO stateIo, IFileIO fileIO, IInputPar
                 continue;
             }
 
-            await _writter.WriteStringAsync(@"", token);
+            await _writter.WriteStringAsync(@" ", token);
         }
     }
 
