@@ -1,13 +1,25 @@
 ﻿namespace Core.Abstractions.Configuration;
 
+/// <summary>
+/// Defines methods to read and write configuration to and from disk.
+/// </summary>
 public interface IConfigurationIO
 {
-    /// <exception cref="IOException"></exception>
-    /// <exception cref="InvalidDataException"></exception>
+    /// <summary>
+    /// Asynchronously loads the WSL2 configuration to the in-memory state from the .wslconfig file.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing th operation.</returns>
     Task LoadConfigurationFromFileAsync(CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Verifies whether the .wslconfig file already exists.
+    /// </summary>
+    /// <returns><c>true</c> if exists. Otherwise <c>false.</c></returns>
     bool VerifyWslConfigExistence();
 
-    /// <exception cref="IOException"></exception>
+    /// <summary>
+    /// Asynchronously writes the in-memory state of WSL2 configuration to the .wslconfig file, overwriting the existing content.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing th operation.</returns>
     Task SaveConfigurationToFileAsync(CancellationToken cancellationToken = default);
 }
