@@ -1,8 +1,6 @@
-﻿using CLI.Events;
+﻿namespace CLI.Startup;
 
-namespace CLI.Startup;
-
-public interface IAppLifetime : IConsoleLoopEvents
+public interface IAppLifetime
 {
     Task StartLoopAsync();
 }
