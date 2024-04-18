@@ -7,7 +7,7 @@ using Core.Exceptions;
 
 namespace Core.SettingEntities
 {
-    [Setting(@"memory", SectionType.Common, @"Allocated Memory")]
+    [Setting(@"memory", SectionType.Common, @"Allocated Memory in MegaBytes")]
     [SupportedWindowsVersion(10)]
     public class AllocatedMemory : BaseDefaultableEntity, ISettingEntity
     {
@@ -40,6 +40,8 @@ namespace Core.SettingEntities
             {
                 return result;
             }
+
+            return TryParseValueWithUnit(valueStr);
 
             throw new FormatException(@"Given value is not a valid value.");
         }
@@ -97,6 +99,39 @@ namespace Core.SettingEntities
         {
             var byteValue = memoryInBytes / Math.Pow(1024, 2);
             return (ulong)Math.Round(byteValue);
+        }
+
+        private static ulong TryParseValueWithUnit(ReadOnlySpan<char> str)
+        {
+            var length = str.Length;
+            if(length < 3)
+            {
+                throw new FormatException(@"Given value is not a valid value.");
+            }
+
+            var value = str[..(length - 2)];
+            var unit = str[(length - 2)..];
+
+            if(!ulong.TryParse(value, out var result))
+            {
+                throw new FormatException(@"Given value is not a valid value.");
+            }
+
+            return TryParseUnit(unit) * result;
+        }
+
+        private static ulong TryParseUnit(ReadOnlySpan<char> str)
+        {
+            if(str.Equals(@"mb", StringComparison.OrdinalIgnoreCase))
+            {
+                return 1;
+            }
+            else if(str.Equals(@"gb", StringComparison.OrdinalIgnoreCase))
+            {
+                return 1024;
+            }
+
+            throw new FormatException(@"Given value is not a valid value.");
         }
     }
 }

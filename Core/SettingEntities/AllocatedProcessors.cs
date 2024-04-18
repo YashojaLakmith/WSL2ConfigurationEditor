@@ -4,7 +4,7 @@ using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
-    [Setting(@"processors", SectionType.Common, @"Allocated Processors")]
+    [Setting(@"processors", SectionType.Common, @"Allocated processor Cores.")]
     [SupportedWindowsVersion(10)]
     public class AllocatedProcessors : BaseDefaultableEntity, ISettingEntity
     {

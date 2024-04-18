@@ -11,6 +11,7 @@ public class Program
     public static async Task Main()
     {
         BuildServiceFactory();
+        await ConfigureStartupAsync();
         await WriteGreetingAsync();
         await RunMessageLoopAsync();
     }
@@ -39,6 +40,7 @@ public class Program
             services.AddSettingHandler();
             services.AddLocalStateHandler();
             services.AddAppLifetime();
+            services.AddStartupConfigurationProvider();
             services.AddLocalConfigurationState();
         });
     }
@@ -51,10 +53,15 @@ public class Program
         await writer.WriteStringAsync(msg);
     }
 
+    private static async Task ConfigureStartupAsync()
+    {
+        var startup = DefaultServiceFactory.ResolveService<IStartupProvider>();
+        await startup.ConfigureStartupAsync();
+    }
+
     private static async Task RunMessageLoopAsync()
     {
         var lifeTime = DefaultServiceFactory.ResolveService<IAppLifetime>();
-        await lifeTime.LoadPrequisitesAsync();
         await lifeTime.StartLoopAsync();
     }
 }

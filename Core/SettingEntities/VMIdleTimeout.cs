@@ -1,7 +1,11 @@
 ﻿using Core.Abstractions.Entity;
+using Core.Attributes;
+using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
+    [Setting(@"vmIdleTimeout", SectionType.Common, @"The number of milliseconds that a VM is idle, before it is shut down.")]
+    [SupportedWindowsVersion(10, 0, 22000, 194)]
     public class VMIdleTimeout : BaseDefaultableEntity, ISettingEntity
     {
         public uint TimeoutInMiliSeconds { get; private set; }

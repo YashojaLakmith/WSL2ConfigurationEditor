@@ -1,8 +1,11 @@
 ﻿using Core.Abstractions.Entity;
+using Core.Attributes;
 using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
+    [Setting(@"autoMemoryReclaim", SectionType.Experimental, @"Mode of automatic release of cached memory.")]
+    [SupportedWindowsVersion(10)]
     public class AutoMemoryReclaim : BaseDefaultableEntity, ISettingEntity
     {
         public MemoryReclaimType ReclaimType { get; private set; }
@@ -22,7 +25,7 @@ namespace Core.SettingEntities
 
         public string ParseValueAsString()
         {
-            return nameof(ReclaimType).ToLower();
+            return ReclaimType.ToString().ToLower();
         }
 
         private static MemoryReclaimType MatchType(string valueAsString)

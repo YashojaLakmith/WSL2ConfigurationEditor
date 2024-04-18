@@ -1,9 +1,13 @@
 ﻿using System.Text;
 
 using Core.Abstractions.Entity;
+using Core.Attributes;
+using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
+    [Setting(@"ignoredPorts", SectionType.Experimental, @"Only applicable when Networking Mode is set to Mirrored. Specifies which ports Linux applications can bind to, even if that port is used in Windows. This enables applications to listen on a port for traffic purely within Linux, so those applications are not blocked even when that port is used for other purposes on Windows. Should be formatted in a comma separated list, e.g: 3000,9000,9090")]
+    [SupportedWindowsVersion(10, 0, 19045, 1766)]
     public class IgnoredPorts : BaseDefaultableEntity, ISettingEntity
     {
         public List<uint> Ports { get; private set; }

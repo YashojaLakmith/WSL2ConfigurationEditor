@@ -9,36 +9,12 @@ namespace CLI.Startup;
 
 public class AppLifetimeImpl(IConfigurationIO stateIo, IFileIO fileIO, IInputParser parser, IConsoleWritter writter) : IDisposable, IAppLifetime
 {
-    private readonly IConfigurationIO _stateIo = stateIo;
-    private readonly IFileIO _fileIo = fileIO;
     private readonly IInputParser _parser = parser;
     private readonly IConsoleWritter _writter = writter;
     private readonly CancellationTokenSource _tokenSource = new();
     private bool disposedValue;
 
     public event EventHandler<ConsoleInputEventArgs>? ConsoleInput;
-
-    public async Task LoadPrequisitesAsync()
-    {
-        var token = _tokenSource.Token;
-        try
-        {
-            if (!_stateIo.VerifyWslConfigExistence())
-            {
-                await _fileIo.CreateEmptyWslConfigFileAsync(token);
-                await _writter.WriteStringAsync(@"Could not find .wslconfig file. A empty file was created.");
-            }
-            await _stateIo.LoadConfigurationFromFileAsync(token);
-        }
-        catch(IOException ex)
-        {
-            await _writter.WriteExceptionAsync(ex, token);
-        }
-        catch(InvalidDataException ex)
-        {
-            await _writter.WriteExceptionAsync(ex, token);
-        }
-    }
 
     public async Task StartLoopAsync()
     {

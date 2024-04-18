@@ -21,36 +21,6 @@ public class ConsoleWritterImpl : IConsoleWritter
         await Console.Out.WriteLineAsync(str);
     }
 
-    private static Document CreateDocument(IEnumerable<EntityData> data)
-    {
-        var thickness = new LineThickness(LineWidth.Double, LineWidth.Single);
-
-        return new(
-            new Grid()
-            {
-                Color = ConsoleColor.Gray,
-                Columns = {GridLength.Auto, GridLength.Star(1), GridLength.Auto},
-                Children =
-                {
-                    new Cell(@"Setting Type"){Stroke = thickness},
-                    new Cell(@"Key"){Stroke = thickness, Color = ConsoleColor.Yellow},
-                    new Cell(@"Description"){Stroke = thickness},
-                    new Cell(@"Current Setting"){Stroke = thickness},
-                    new Cell(@"Is Supported"){Stroke = thickness},
-
-                    data.Select(item => new[]
-                    {
-                        new Cell(item.SectionName),
-                        new Cell(item.SettingId),
-                        new Cell(item.CommonName),
-                        new Cell(item.SettingValue),
-                        new Cell(item.IsSupported.ToString())
-                    })
-                }
-            }
-            );
-    }
-
     public async Task WriteExceptionAsync(Exception ex, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -63,5 +33,30 @@ public class ConsoleWritterImpl : IConsoleWritter
         {
             Console.ForegroundColor = ConsoleColor.Gray;
         }
+    }
+
+    private static Document CreateDocument(IEnumerable<EntityData> data)
+    {
+        var thickness = new LineThickness(LineWidth.Double, LineWidth.Single);
+
+        return new(
+            new Grid()
+            {
+                Color = ConsoleColor.Gray,
+                Columns = { GridLength.Auto, GridLength.Auto, GridLength.Auto },
+                Children =
+                {
+                    new Cell(@"Key"){Stroke = thickness, Color = ConsoleColor.Yellow},
+                    new Cell(@"Current Setting"){Stroke = thickness},
+                    new Cell(@"Is Supported"),
+                    data.Select(item => new[]
+                    {
+                        new Cell(item.SettingId) { Align = Align.Left },
+                        new Cell(item.SettingValue),
+                        new Cell(item.IsSupported ? @"Yes" : @"No")
+                    })
+                }
+            }
+            );
     }
 }
