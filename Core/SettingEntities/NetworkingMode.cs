@@ -1,8 +1,11 @@
 ﻿using Core.Abstractions.Entity;
+using Core.Attributes;
 using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
+    [Setting(@"networkingMode", SectionType.Common, @"Switches between Mirrored and NAT networking modes.")]
+    [SupportedWindowsVersion(10, 0, 19045, 1766)]
     public class NetworkingMode : BaseDefaultableEntity, ISettingEntity
     {
         public NetworkMode NetworkMode { get; private set; }

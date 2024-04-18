@@ -1,9 +1,11 @@
-﻿using System.Text;
-
-using Core.Abstractions.Entity;
+﻿using Core.Abstractions.Entity;
+using Core.Attributes;
+using Core.Enumerations;
 
 namespace Core.SettingEntities
 {
+    [Setting(@"swapFile", SectionType.Common, @"An absolute Windows path to the swap virtual hard disk.")]
+    [SupportedWindowsVersion(10)]
     public class SwapFilePath : BaseDefaultableEntity, ISettingEntity
     {
         public string PathToSwapFile { get; private set; }
@@ -41,6 +43,8 @@ namespace Core.SettingEntities
                 throw new FormatException(@"Path should not be empty string or a string containing only whitespace characters.");
             }
 
+            path = path.Replace(@"\\", @"\");
+
             try
             {
                 file = Path.GetFileName(path);
@@ -55,7 +59,7 @@ namespace Core.SettingEntities
                 throw new FormatException(@"Path contains characters more than the system defined limit.");
             }
 
-            if (!Path.IsPathRooted(file))
+            if (!Path.IsPathRooted(path))
             {
                 throw new FormatException(@"Path should be an absolute Win32 path");
 

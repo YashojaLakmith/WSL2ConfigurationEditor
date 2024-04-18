@@ -71,6 +71,11 @@ public static class ServiceExtensions
         return services.AddSingleton<IAppLifetime, AppLifetimeImpl>();
     }
 
+    public static IServiceCollection AddStartupConfigurationProvider(this IServiceCollection services)
+    {
+        return services.AddSingleton<IStartupProvider, StartupProviderImpl>();
+    }
+
     public static IServiceCollection AddLocalConfigurationState(this IServiceCollection services)
     {
         return services.AddSingleton<ILocalConfigurationState, LocalConfigurationStateImpl>();

@@ -1,4 +1,5 @@
 ﻿using CLI.ConsoleInterface;
+using CLI.DTO;
 using CLI.Extensions;
 using CLI.States;
 
@@ -31,7 +32,8 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         {
             cancellationToken.ThrowIfCancellationRequested();
             var data = _localState.GetSettingByKey(key).AsEntityData();
-            await _writter.WriteTableAsync([data], cancellationToken);
+            var str = FormatString(data);
+            await _writter.WriteStringAsync(str, cancellationToken);
         }
         catch (InvalidOperationException ex)
         {
@@ -74,5 +76,16 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }
+    }
+
+    private static string FormatString(EntityData data)
+    {
+        return @$"
+Setting Key:    {data.SettingId}
+Setting Type:   {data.SectionName}
+Current Value:  {data.SettingValue}
+Is Supported:   {(data.IsSupported ? @"Yes" : @"No")}
+Description:    {data.CommonName}
+";
     }
 }
