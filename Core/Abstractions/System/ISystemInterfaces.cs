@@ -2,6 +2,8 @@
 
 public interface ISystemInterfaces
 {
-    /// <exception cref="SystemException"></exception>
+    /// <summary>
+    /// Restarts the WSL2 process.
+    /// </summary>
     void RestartWslProcess();
 }
