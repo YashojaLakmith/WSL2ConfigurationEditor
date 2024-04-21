@@ -1,4 +1,5 @@
-﻿using CLI.DTO;
+﻿using CLI.Abstractions.States;
+using CLI.DTO;
 using CLI.Extensions;
 
 using Core.Abstractions.Attributes;
@@ -34,7 +35,7 @@ public class LocalConfigurationStateImpl : ILocalConfigurationState
     {
         foreach (var item in _settings)
         {
-            if(IsMatchingEntity(item, key))
+            if (IsMatchingEntity(item, key))
             {
                 return item;
             }

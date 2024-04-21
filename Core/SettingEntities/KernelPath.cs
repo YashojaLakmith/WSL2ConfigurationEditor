@@ -28,6 +28,7 @@ namespace Core.SettingEntities
 
         public void SetValue(string valueAsString)
         {
+            valueAsString = valueAsString.Replace(@"\\", @"\");
             ValidateWin32Path(valueAsString);
             PathToKernel = valueAsString;
             IsDefault &= false;
@@ -42,8 +43,6 @@ namespace Core.SettingEntities
             {
                 throw new FormatException(@"Path should not be empty string or a string containing only whitespace characters.");
             }
-
-            path = path.Replace(@"\\", @"\");
 
             try
             {

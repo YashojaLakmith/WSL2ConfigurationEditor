@@ -8,7 +8,7 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
     private readonly IConfigurationState _state = state;
     private readonly IFileIO _fileIO = fileIO;
 
-    public async Task LoadConfigurationFromFileAsync(CancellationToken cancellationToken = default)     // Needs to handle exceptions
+    public async Task LoadConfigurationFromFileAsync(CancellationToken cancellationToken = default)
     {
         var lines = await _fileIO.ReadLinesFromFileAsync(cancellationToken);
         VerifyWsl2Tag(lines);
@@ -16,7 +16,7 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
         _state.LoadConfiguration(lines.Skip(idx + 1));
     }
 
-    public async Task SaveConfigurationToFileAsync(CancellationToken cancellationToken = default)       // Needs to handle exceptions
+    public async Task SaveConfigurationToFileAsync(CancellationToken cancellationToken = default)
     {
         IEnumerable<string> lines = _state.ParseAsConfigLines();
         try

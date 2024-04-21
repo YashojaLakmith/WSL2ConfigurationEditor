@@ -1,4 +1,4 @@
-﻿namespace CLI.InputHandlers;
+﻿namespace CLI.Abstractions.InputHandlers;
 
 /// <summary>
 /// Defines methods for handling help related queries.

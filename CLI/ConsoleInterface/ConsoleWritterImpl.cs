@@ -1,5 +1,6 @@
 ﻿using Alba.CsConsoleFormat;
 
+using CLI.Abstractions.ConsoleInterface;
 using CLI.DTO;
 
 namespace CLI.ConsoleInterface;

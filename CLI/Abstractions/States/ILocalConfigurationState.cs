@@ -1,8 +1,7 @@
 ﻿using CLI.DTO;
-
 using Core.Abstractions.Entity;
 
-namespace CLI.States;
+namespace CLI.Abstractions.States;
 
 /// <summary>
 /// Defines methods for manipulating the frontend specific in-memory configuration.

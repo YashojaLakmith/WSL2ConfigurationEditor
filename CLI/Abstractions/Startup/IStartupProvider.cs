@@ -1,5 +1,4 @@
-﻿
-namespace CLI.Startup;
+﻿namespace CLI.Abstractions.Startup;
 
 /// <summary>
 /// Defines methods for prepare the application for user interaction.

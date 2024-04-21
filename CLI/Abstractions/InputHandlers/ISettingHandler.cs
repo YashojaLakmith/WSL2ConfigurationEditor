@@ -1,5 +1,4 @@
-﻿
-namespace CLI.InputHandlers;
+﻿namespace CLI.Abstractions.InputHandlers;
 
 /// <summary>
 /// Defines methods for handling setting related queries.

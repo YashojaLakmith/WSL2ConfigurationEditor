@@ -1,5 +1,6 @@
-﻿using CLI.ConsoleInterface;
-using CLI.States;
+﻿using CLI.Abstractions.ConsoleInterface;
+using CLI.Abstractions.InputHandlers;
+using CLI.Abstractions.States;
 
 using Core.Abstractions.Configuration;
 
@@ -20,7 +21,7 @@ public class StateHandlerImpl(IConfigurationIO configurationIO, IConfigurationSt
             _localState.CommitChanges();
             await _configurationIo.SaveConfigurationToFileAsync(cancellationToken);
         }
-        catch(IOException ex)
+        catch (IOException ex)
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }
@@ -35,11 +36,11 @@ public class StateHandlerImpl(IConfigurationIO configurationIO, IConfigurationSt
             await _configurationIo.LoadConfigurationFromFileAsync(cancellationToken);
             _localState.ResetChanges();
         }
-        catch(IOException ex)
+        catch (IOException ex)
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }
-        catch(InvalidDataException ex)
+        catch (InvalidDataException ex)
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }
@@ -61,7 +62,7 @@ public class StateHandlerImpl(IConfigurationIO configurationIO, IConfigurationSt
             _localState.ResetChanges();
             await _configurationIo.SaveConfigurationToFileAsync(cancellationToken);
         }
-        catch(IOException ex)
+        catch (IOException ex)
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }

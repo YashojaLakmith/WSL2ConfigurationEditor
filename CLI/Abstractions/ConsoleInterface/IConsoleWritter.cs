@@ -1,6 +1,6 @@
 ﻿using CLI.DTO;
 
-namespace CLI.ConsoleInterface;
+namespace CLI.Abstractions.ConsoleInterface;
 
 /// <summary>
 /// Defines methods for writing to the console.
