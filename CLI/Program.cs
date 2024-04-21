@@ -1,6 +1,6 @@
-﻿using CLI.ConsoleInterface;
+﻿using CLI.Abstractions.ConsoleInterface;
+using CLI.Abstractions.Startup;
 using CLI.ServiceFactories;
-using CLI.Startup;
 
 using Microsoft.Extensions.Hosting;
 

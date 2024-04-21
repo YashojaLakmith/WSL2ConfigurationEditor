@@ -1,4 +1,6 @@
-﻿namespace CLI.ServiceFactories;
+﻿using CLI.Abstractions.ServiceFactories;
+
+namespace CLI.ServiceFactories;
 
 public class DefaultServiceFactory
 {
@@ -13,7 +15,7 @@ public class DefaultServiceFactory
 
     public static T ResolveService<T>() where T : notnull
     {
-        if(_serviceFactory is not null)
+        if (_serviceFactory is not null)
         {
             return _serviceFactory.ResolveService<T>();
         }

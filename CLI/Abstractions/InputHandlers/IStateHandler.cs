@@ -1,5 +1,4 @@
-﻿
-namespace CLI.InputHandlers;
+﻿namespace CLI.Abstractions.InputHandlers;
 
 /// <summary>
 /// Defines methods for manipulating the in-memory state of the configuration.

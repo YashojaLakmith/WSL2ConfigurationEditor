@@ -1,4 +1,8 @@
-﻿using CLI.ConsoleInterface;
+﻿using CLI.Abstractions.ConsoleInterface;
+using CLI.Abstractions.InputHandlers;
+using CLI.Abstractions.Startup;
+using CLI.Abstractions.States;
+using CLI.ConsoleInterface;
 using CLI.InputHandlers;
 using CLI.Startup;
 using CLI.States;
@@ -58,7 +62,7 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddSettingHandler(this IServiceCollection services)
     {
-        return services.AddSingleton<ISettingHandler,  SettingHandlerImpl>();
+        return services.AddSingleton<ISettingHandler, SettingHandlerImpl>();
     }
 
     public static IServiceCollection AddLocalStateHandler(this IServiceCollection services)

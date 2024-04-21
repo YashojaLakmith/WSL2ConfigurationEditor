@@ -1,4 +1,4 @@
-﻿namespace CLI.Startup;
+﻿namespace CLI.Abstractions.Startup;
 
 /// <summary>
 /// Defines top level services responsible for handling the application lifetime.

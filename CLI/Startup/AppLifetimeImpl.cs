@@ -1,5 +1,6 @@
-﻿using CLI.ConsoleInterface;
-using CLI.InputHandlers;
+﻿using CLI.Abstractions.ConsoleInterface;
+using CLI.Abstractions.InputHandlers;
+using CLI.Abstractions.Startup;
 
 namespace CLI.Startup;
 

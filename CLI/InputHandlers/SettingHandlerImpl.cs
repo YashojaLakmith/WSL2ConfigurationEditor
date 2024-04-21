@@ -1,7 +1,8 @@
-﻿using CLI.ConsoleInterface;
+﻿using CLI.Abstractions.ConsoleInterface;
+using CLI.Abstractions.InputHandlers;
+using CLI.Abstractions.States;
 using CLI.DTO;
 using CLI.Extensions;
-using CLI.States;
 
 using Core.Exceptions;
 
@@ -49,7 +50,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
             var setting = _localState.GetSettingByKey(key);
             setting.SetDefaultValue();
         }
-        catch(InvalidOperationException ex)
+        catch (InvalidOperationException ex)
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }
@@ -68,11 +69,11 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }
-        catch(FormatException ex)
+        catch (FormatException ex)
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }
-        catch(PlatformInvokeException ex)
+        catch (PlatformInvokeException ex)
         {
             await _writter.WriteExceptionAsync(ex, cancellationToken);
         }

@@ -1,4 +1,4 @@
-﻿namespace CLI.InputHandlers;
+﻿namespace CLI.Abstractions.InputHandlers;
 
 /// <summary>
 /// Defines methods for parsing the user text input and invoking the necessary services.

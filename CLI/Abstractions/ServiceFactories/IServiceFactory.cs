@@ -1,4 +1,4 @@
-﻿namespace CLI.ServiceFactories;
+﻿namespace CLI.Abstractions.ServiceFactories;
 
 /// <summary>
 /// Defines methods for resolving services from the IoC provider.

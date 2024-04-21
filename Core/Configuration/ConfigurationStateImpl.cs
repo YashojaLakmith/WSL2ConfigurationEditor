@@ -27,7 +27,7 @@ public class ConfigurationStateImpl : IConfigurationState
         }
     }
 
-    public void LoadConfiguration(IEnumerable<string> configLines)  // Completed
+    public void LoadConfiguration(IEnumerable<string> configLines)  
     {
         lock (_configDict)
         {
@@ -45,7 +45,7 @@ public class ConfigurationStateImpl : IConfigurationState
         }
     }
 
-    public List<string> ParseAsConfigLines()    // Completed
+    public List<string> ParseAsConfigLines()    
     {
         List<string> lines = [];
 
@@ -83,7 +83,7 @@ public class ConfigurationStateImpl : IConfigurationState
         }
     }
 
-    public TSetting GetSetting<TSetting>()  where TSetting : class, ISettingEntity, new()    // Completed
+    public TSetting GetSetting<TSetting>()  where TSetting : class, ISettingEntity, new()
     {
         var conf = new TSetting();
         var settingAttr = TryGetSettingAttribute<TSetting>();
@@ -104,7 +104,7 @@ public class ConfigurationStateImpl : IConfigurationState
         }
     }   
 
-    public void UpdateSetting(ISettingEntity setting)   // Completed
+    public void UpdateSetting(ISettingEntity setting) 
     {
         var settingAttr = TryGetSettingAttribute(setting);
         var settingValue = setting.ParseValueAsString();

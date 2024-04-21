@@ -1,4 +1,5 @@
-﻿using CLI.ConsoleInterface;
+﻿using CLI.Abstractions.ConsoleInterface;
+using CLI.Abstractions.InputHandlers;
 
 namespace CLI.InputHandlers;
 
