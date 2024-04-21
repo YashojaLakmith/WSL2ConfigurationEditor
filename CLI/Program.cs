@@ -2,7 +2,7 @@
 using CLI.Abstractions.Startup;
 using CLI.ServiceFactories;
 
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CLI;
 
@@ -18,31 +18,24 @@ public class Program
 
     private static void BuildServiceFactory()
     {
-        var hostBuilder = Host.CreateDefaultBuilder();
-        ConfigureServices(hostBuilder);
-        var host = hostBuilder.Build();
-        var container = new Container(host.Services);
-        DefaultServiceFactory.SetProvider(container);
+        DefaultServiceFactory.BuildServiceFactory(ConfigureServices);
     }
 
-    private static void ConfigureServices(IHostBuilder hostBuilder)
+    private static void ConfigureServices(IServiceCollection services)
     {
-        hostBuilder.ConfigureServices((context, services) =>
-        {
-            services.AddAttributeExtractor();
-            services.AddConfigurationState();
-            services.AddConfigurationIO();
-            services.AddFileIO();
-            services.AddSystemInterfaces();
-            services.AddConsoleWritter();
-            services.AddHelpHandler();
-            services.AddInputParser();
-            services.AddSettingHandler();
-            services.AddLocalStateHandler();
-            services.AddAppLifetime();
-            services.AddStartupConfigurationProvider();
-            services.AddLocalConfigurationState();
-        });
+        services.AddAttributeExtractor();
+        services.AddConfigurationState();
+        services.AddConfigurationIO();
+        services.AddFileIO();
+        services.AddSystemInterfaces();
+        services.AddConsoleWritter();
+        services.AddHelpHandler();
+        services.AddInputParser();
+        services.AddSettingHandler();
+        services.AddLocalStateHandler();
+        services.AddAppLifetime();
+        services.AddStartupConfigurationProvider();
+        services.AddLocalConfigurationState();
     }
 
     private static async Task WriteGreetingAsync()
