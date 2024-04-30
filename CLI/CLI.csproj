@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Alba.CsConsoleFormat" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

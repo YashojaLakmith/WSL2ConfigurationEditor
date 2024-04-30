@@ -1,4 +1,5 @@
-﻿using System.Security.AccessControl;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.AccessControl;
 using System.Security.Principal;
 
 using Core.Abstractions.System;
@@ -59,6 +60,7 @@ public class FileIOImpl : IFileIO
         return Environment.ExpandEnvironmentVariables(wslconfigPath);
     }
 
+    [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Apllication is exclusive to Windows platforms.")]
     private static List<FileSystemAccessRule> GetAccessRulesOfThePath(string path)
     {
         var securityInfo = new FileInfo(path).GetAccessControl();
@@ -69,12 +71,14 @@ public class FileIOImpl : IFileIO
             .ToList();
     }
 
+    [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Apllication is exclusive to Windows platforms.")]
     private static bool HasRequiredPermissions(IEnumerable<FileSystemAccessRule> rules)
     {
         return rules.Where(FileSystemRightPredicate)
             .Any();
     }
 
+    [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Apllication is exclusive to Windows platforms.")]
     private static bool FileSystemRightPredicate(FileSystemAccessRule rule)
     {
         return rule.FileSystemRights == FileSystemRights.FullControl
