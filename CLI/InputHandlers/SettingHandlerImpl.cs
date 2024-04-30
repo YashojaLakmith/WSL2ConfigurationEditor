@@ -13,7 +13,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
     private readonly ILocalConfigurationState _localState = localSate;
     private readonly IConsoleWritter _writter = writter;
 
-    public async Task ListAllSettingDataAsync(CancellationToken cancellationToken = default)    // Completed
+    public async Task ListAllSettingDataAsync(CancellationToken cancellationToken = default)
     {
         try
         {
@@ -27,7 +27,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         }
     }
 
-    public async Task ListSingleSettingDataAsync(string key, CancellationToken cancellationToken = default)     // Completed
+    public async Task ListSingleSettingDataAsync(string key, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -42,7 +42,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         }
     }
 
-    public async Task MakeDefaultAsync(string key, CancellationToken cancellationToken = default)       // Completed
+    public async Task MakeDefaultAsync(string key, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -56,7 +56,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         }
     }
 
-    public async Task SetSettingAsync(string key, string value, CancellationToken cancellationToken = default)  // Completed
+    public async Task SetSettingAsync(string key, string value, CancellationToken cancellationToken = default)
     {
         try
         {

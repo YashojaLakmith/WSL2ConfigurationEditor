@@ -224,16 +224,3 @@ public class InputParserImpl(IHelpHandler helpHandler, ISettingHandler settingHa
         return KeyValuePair.Create(parts[0], parts[1]);
     }
 }
-
-/*
-+list-settings                   Lists all settings.
-+info <setting key>              Gives information on the setting with given key.
-+save-changes                    Saves the changes to the .wslconfig file.
-+refresh                         Reloads the configuration from the .wslconfig file.
-+reset-changes                   Resets the unsaved changes.
-+make-default <setting key>      Sets the given setting to its default.
-+make-default-all                Sets the all settings to their defaults.
-+set <setting key> <value>       Sets the setting to new value.
-+about                           About WSL Configuration Editor.
-+help                            Get help.
-*/

@@ -157,7 +157,7 @@ public class ConfigurationStateImpl : IConfigurationState
         }
     }
 
-    private KeyValuePair<string, string> CreateKeyValuePair(ReadOnlySpan<char> line)
+    private static KeyValuePair<string, string> CreateKeyValuePair(ReadOnlySpan<char> line)
     {
         var idx = line.IndexOf('=');
         if (idx < 1)
