@@ -21,6 +21,12 @@ public class HelpHandlerImpl(IConsoleWritter consoleWritter) : IHelpHandler
         await _consoleWritter.WriteStringAsync(text, cancellationToken);
     }
 
+    public async Task HandleExitAsync(CancellationToken cancellationToken = default)
+    {
+        await Console.Out.WriteLineAsync(@"Exitting...");
+        Environment.Exit(0);
+    }
+
     private static string SettingHelpText()
     {
         return @"

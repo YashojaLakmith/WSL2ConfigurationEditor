@@ -1,6 +1,7 @@
 ﻿using CLI.Abstractions.ConsoleInterface;
 using CLI.Abstractions.Startup;
 using CLI.ServiceFactories;
+using CLI.Synchronization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ public class Program
 {
     public static async Task Main()
     {
+        using var instance = GlobalInstanceRepresenter.Create();
         BuildServiceFactory();
         await ConfigureStartupAsync();
         await WriteGreetingAsync();

@@ -16,4 +16,10 @@ public interface IHelpHandler
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the operation.</returns>
     Task DisplayAboutAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asynchronously exits from the application.
+    /// </summary>
+    /// <returns>A <see cref="Task"/> representing the operation.</returns>
+    Task HandleExitAsync(CancellationToken cancellationToken = default);
 }

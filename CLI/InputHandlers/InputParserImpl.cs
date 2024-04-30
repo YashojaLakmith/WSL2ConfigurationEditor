@@ -27,7 +27,8 @@ public class InputParserImpl(IHelpHandler helpHandler, ISettingHandler settingHa
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        return await TryParseAboutAsync(str, cancellationToken)
+        return await TryParseExitAsync(str, cancellationToken)
+            || await TryParseAboutAsync(str, cancellationToken)
             || await TryParseHelpAsync(str, cancellationToken)
             || await TryParseListSettingsAsync(str, cancellationToken)
             || await TryParseMakeAllDefaultAsync(str, cancellationToken)
@@ -37,6 +38,20 @@ public class InputParserImpl(IHelpHandler helpHandler, ISettingHandler settingHa
             || await TryParseSettingInfoAsync(str, cancellationToken)
             || await TryParseMakeSingleDefaultAsync(str, cancellationToken)
             || await TryParseSetSettingAsync(str, cancellationToken);
+    }
+
+    private async Task<bool> TryParseExitAsync(string str, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        const string text = @"exit";
+
+        if (CaseInsensitiveStringCompare(text, str))
+        {
+            await _helpHandler.HandleExitAsync(cancellationToken);
+            return true;
+        }
+
+        return false;
     }
 
     private async Task<bool> TryParseHelpAsync(string str, CancellationToken cancellationToken = default)
