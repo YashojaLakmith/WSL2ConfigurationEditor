@@ -22,9 +22,9 @@ public sealed class GlobalInstanceRepresenter : IDisposable
     [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Apllication is exclusive to Windows platforms.")]
     private static Mutex CreateAndConfigureMutex()
     {
-        var name = $@"Global\{AppGuid}";
-        var security = ConfigureMutexSecurity();
-        var mutex = new Mutex(false, name, out _);
+        string name = $@"Global\{AppGuid}";
+        MutexSecurity security = ConfigureMutexSecurity();
+        Mutex mutex = new(false, name, out _);
         mutex.SetAccessControl(security);
 
         return mutex;
@@ -33,8 +33,8 @@ public sealed class GlobalInstanceRepresenter : IDisposable
     [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Apllication is exclusive to Windows platforms.")]
     private static MutexSecurity ConfigureMutexSecurity()
     {
-        var security = new MutexSecurity();
-        var rule = CreateMutexAccessRule();
+        MutexSecurity security = new();
+        MutexAccessRule rule = CreateMutexAccessRule();
         security.AddAccessRule(rule);
 
         return security;

@@ -13,20 +13,17 @@ public class DefaultServiceFactory
 
     public static T ResolveService<T>() where T : notnull
     {
-        if (_serviceFactory is not null)
-        {
-            return _serviceFactory.ResolveService<T>();
-        }
-
-        throw new InvalidOperationException(@"Factory has not yet been built.");
+        return _serviceFactory is not null
+            ? _serviceFactory.ResolveService<T>()
+            : throw new InvalidOperationException(@"Factory has not yet been built.");
     }
 
     public static void BuildServiceFactory(Action<IServiceCollection> serviceDelegate)
     {
-        var builder = Host.CreateDefaultBuilder();
+        IHostBuilder builder = Host.CreateDefaultBuilder();
         ConfigureServices(builder, serviceDelegate);
-        var host = builder.Build();
-        var container = new Container(host.Services);
+        IHost host = builder.Build();
+        Container container = new(host.Services);
         SetProvider(container);
     }
 

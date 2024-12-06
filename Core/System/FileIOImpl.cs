@@ -6,7 +6,7 @@ using Core.Abstractions.System;
 
 namespace Core.System;
 
-public class FileIOImpl : IFileIO
+internal class FileIOImpl : IFileIO
 {
     public bool CheckFileExistence()
     {

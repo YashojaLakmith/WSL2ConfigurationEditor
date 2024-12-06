@@ -11,7 +11,7 @@ public class Program
 {
     public static async Task Main()
     {
-        using var instance = GlobalInstanceRepresenter.Create();
+        using GlobalInstanceRepresenter instance = GlobalInstanceRepresenter.Create();
         BuildServiceFactory();
         await ConfigureStartupAsync();
         await WriteGreetingAsync();
@@ -42,21 +42,21 @@ public class Program
 
     private static async Task WriteGreetingAsync()
     {
-        var writer = DefaultServiceFactory.ResolveService<IConsoleWritter>();
-        var msg = "WSL Configuration Editor\nInsert \"help\" for get all commands.";
+        IConsoleWritter writer = DefaultServiceFactory.ResolveService<IConsoleWritter>();
+        string msg = "WSL Configuration Editor\nInsert \"help\" for get all commands.";
 
         await writer.WriteStringAsync(msg);
     }
 
     private static async Task ConfigureStartupAsync()
     {
-        var startup = DefaultServiceFactory.ResolveService<IStartupProvider>();
+        IStartupProvider startup = DefaultServiceFactory.ResolveService<IStartupProvider>();
         await startup.ConfigureStartupAsync();
     }
 
     private static async Task RunMessageLoopAsync()
     {
-        var lifeTime = DefaultServiceFactory.ResolveService<IAppLifetime>();
+        IAppLifetime lifeTime = DefaultServiceFactory.ResolveService<IAppLifetime>();
         await lifeTime.StartLoopAsync();
     }
 }

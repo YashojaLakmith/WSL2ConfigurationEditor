@@ -10,14 +10,14 @@ public class HelpHandlerImpl(IConsoleWritter consoleWritter) : IHelpHandler
     public async Task DisplayGenericHelpAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var text = SettingHelpText();
+        string text = SettingHelpText();
         await _consoleWritter.WriteStringAsync(text, cancellationToken);
     }
 
     public async Task DisplayAboutAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var text = AboutText();
+        string text = AboutText();
         await _consoleWritter.WriteStringAsync(text, cancellationToken);
     }
 

@@ -8,7 +8,7 @@ using Core.Exceptions;
 namespace Core.Configuration;
 
 // This implementation is supposed to be used as a singleton service.
-public class ConfigurationStateImpl : IConfigurationState
+internal class ConfigurationStateImpl : IConfigurationState
 {
     private readonly Dictionary<string, Dictionary<string, string>> _configDictionary;
     private readonly IAttributeExtracter _attributeExtractor;

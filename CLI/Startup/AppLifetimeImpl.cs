@@ -4,16 +4,22 @@ using CLI.Abstractions.Startup;
 
 namespace CLI.Startup;
 
-public class AppLifetimeImpl(IInputParser parser, IConsoleWritter writter) : IDisposable, IAppLifetime
+public class AppLifetimeImpl : IDisposable, IAppLifetime
 {
-    private readonly IInputParser _parser = parser;
-    private readonly IConsoleWritter _writter = writter;
+    private readonly IInputParser _parser;
+    private readonly IConsoleWritter _writter;
     private readonly CancellationTokenSource _tokenSource = new();
     private bool disposedValue;
 
+    public AppLifetimeImpl(IInputParser parser, IConsoleWritter writter)
+    {
+        _parser = parser;
+        _writter = writter;
+    }
+
     public async Task StartLoopAsync()
     {
-        var token = _tokenSource.Token;
+        CancellationToken token = _tokenSource.Token;
         string? inputString;
 
         while (true)
@@ -25,7 +31,7 @@ public class AppLifetimeImpl(IInputParser parser, IConsoleWritter writter) : IDi
             {
                 try
                 {
-                    await _parser.ParseInputAsync(inputString, token);
+                    await _parser.ParseInputAsync(inputString!, token);
                 }
                 catch (Exception ex)
                 {

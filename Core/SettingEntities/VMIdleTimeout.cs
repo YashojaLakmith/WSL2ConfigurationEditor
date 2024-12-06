@@ -2,36 +2,35 @@
 using Core.Attributes;
 using Core.Enumerations;
 
-namespace Core.SettingEntities
+namespace Core.SettingEntities;
+
+[Setting(@"vmIdleTimeout", SectionType.Common, @"The number of milliseconds that a VM is idle, before it is shut down.")]
+[SupportedWindowsVersion(10, 0, 22000, 194)]
+public class VMIdleTimeout : BaseDefaultableEntity, ISettingEntity
 {
-    [Setting(@"vmIdleTimeout", SectionType.Common, @"The number of milliseconds that a VM is idle, before it is shut down.")]
-    [SupportedWindowsVersion(10, 0, 22000, 194)]
-    public class VMIdleTimeout : BaseDefaultableEntity, ISettingEntity
+    public uint TimeoutInMiliSeconds { get; private set; }
+
+    public VMIdleTimeout() : base(true) { }
+
+    public VMIdleTimeout(uint timeoutInMiliSeconds) : base(false)
     {
-        public uint TimeoutInMiliSeconds { get; private set; }
+        TimeoutInMiliSeconds = timeoutInMiliSeconds;
+    }
 
-        public VMIdleTimeout() : base(true) { }
+    public string ParseValueAsString()
+    {
+        return TimeoutInMiliSeconds.ToString();
+    }
 
-        public VMIdleTimeout(uint timeoutInMiliSeconds) : base(false)
+    public void SetValue(string valueAsString)
+    {
+        if (uint.TryParse(valueAsString, out uint result))
         {
-            TimeoutInMiliSeconds = timeoutInMiliSeconds;
+            TimeoutInMiliSeconds = result;
+            IsDefault &= false;
+            return;
         }
 
-        public string ParseValueAsString()
-        {
-            return TimeoutInMiliSeconds.ToString();
-        }
-
-        public void SetValue(string valueAsString)
-        {
-            if (uint.TryParse(valueAsString, out var result))
-            {
-                TimeoutInMiliSeconds = result;
-                IsDefault &= false;
-                return;
-            }
-
-            throw new FormatException(@"Value must be a unsigned numerical value.");
-        }
+        throw new FormatException(@"Value must be a unsigned numerical value.");
     }
 }

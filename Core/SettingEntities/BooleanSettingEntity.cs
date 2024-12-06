@@ -4,7 +4,7 @@ public abstract class BooleanSettingEntity : BaseDefaultableEntity
 {
     public bool Value { get; protected set; }
 
-    public BooleanSettingEntity(bool isDefault): base(isDefault) { }
+    public BooleanSettingEntity(bool isDefault) : base(isDefault) { }
 
     public string ParseValueAsString()
     {
@@ -19,11 +19,8 @@ public abstract class BooleanSettingEntity : BaseDefaultableEntity
 
     private static bool TryParseStringAsBool(string valueAsString)
     {
-        if(bool.TryParse(valueAsString.ToLower(), out var result))
-        {
-            return result;
-        }
-
-        throw new FormatException(@"The value should either be 'true' or 'false'.");
+        return bool.TryParse(valueAsString.ToLower(), out bool result)
+            ? result
+            : throw new FormatException(@"The value should either be 'true' or 'false'.");
     }
 }

@@ -3,10 +3,16 @@ using Core.Abstractions.System;
 
 namespace Core.Configuration;
 
-public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IConfigurationIO
+internal class ConfigurationIOImpl : IConfigurationIO
 {
-    private readonly IConfigurationState _state = state;
-    private readonly IFileIO _fileIO = fileIO;
+    private readonly IConfigurationState _state;
+    private readonly IFileIO _fileIO;
+
+    public ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO)
+    {
+        _state = state;
+        _fileIO = fileIO;
+    }
 
     public async Task LoadConfigurationFromFileAsync(CancellationToken cancellationToken = default)
     {

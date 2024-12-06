@@ -33,7 +33,7 @@ public class LocalConfigurationStateImpl : ILocalConfigurationState
 
     public ISettingEntity GetSettingByKey(string key)
     {
-        foreach (var item in _settings)
+        foreach (ISettingEntity item in _settings)
         {
             if (IsMatchingEntity(item, key))
             {
@@ -46,7 +46,7 @@ public class LocalConfigurationStateImpl : ILocalConfigurationState
 
     public void CommitChanges()
     {
-        foreach (var setting in _settings)
+        foreach (ISettingEntity setting in _settings)
         {
             try
             {
@@ -98,7 +98,7 @@ public class LocalConfigurationStateImpl : ILocalConfigurationState
     {
         try
         {
-            var setting = _state.GetSetting<T>();
+            T setting = _state.GetSetting<T>();
             _settings.Add(setting);
         }
         catch (SettingNotFoundException)
@@ -114,7 +114,7 @@ public class LocalConfigurationStateImpl : ILocalConfigurationState
 
     private bool IsMatchingEntity(ISettingEntity entity, string key)
     {
-        var attr = _extractor.TryExtractAttribute<SettingAttribute>(entity);
+        SettingAttribute attr = _extractor.TryExtractAttribute<SettingAttribute>(entity);
         return attr.SettingKey.Equals(key, StringComparison.OrdinalIgnoreCase);
     }
 }
