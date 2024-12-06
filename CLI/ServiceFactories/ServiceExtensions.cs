@@ -10,9 +10,7 @@ using CLI.States;
 using Core.Abstractions.Attributes;
 using Core.Abstractions.Configuration;
 using Core.Abstractions.System;
-using Core.Attributes;
-using Core.Configuration;
-using Core.System;
+using Core.Factories;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,27 +20,38 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddAttributeExtractor(this IServiceCollection services)
     {
-        return services.AddSingleton<IAttributeExtracter, AttributeExtracterImpl>();
+        return services.AddSingleton<IAttributeExtracter>(_ => AttributeExtractorFactory.CreateInstance());
     }
 
     public static IServiceCollection AddConfigurationIO(this IServiceCollection services)
     {
-        return services.AddSingleton<IConfigurationIO, ConfigurationIOImpl>();
+        return services.AddSingleton<IConfigurationIO>(serviceProvider =>
+        {
+            IConfigurationState configurationState = serviceProvider.GetRequiredService<IConfigurationState>();
+            IFileIO fileIo = serviceProvider.GetRequiredService<IFileIO>();
+
+            return ConfigurationFactory.CreateCofigurationIO(configurationState, fileIo);
+        });
     }
 
     public static IServiceCollection AddConfigurationState(this IServiceCollection services)
     {
-        return services.AddSingleton<IConfigurationState, ConfigurationStateImpl>();
+        return services.AddSingleton<IConfigurationState>(serviceProvider =>
+        {
+            IAttributeExtracter attributeExtractor = serviceProvider.GetRequiredService<IAttributeExtracter>();
+
+            return ConfigurationFactory.CreateConfigurationState(attributeExtractor);
+        });
     }
 
     public static IServiceCollection AddFileIO(this IServiceCollection services)
     {
-        return services.AddSingleton<IFileIO, FileIOImpl>();
+        return services.AddSingleton<IFileIO>(_ => SystemInterfaceFactory.CreateFileIoInstance());
     }
 
     public static IServiceCollection AddSystemInterfaces(this IServiceCollection services)
     {
-        return services.AddSingleton<ISystemInterfaces, SystemInterfacesImpl>();
+        return services.AddSingleton<ISystemInterfaces>(_ => SystemInterfaceFactory.CreateSystemInteface());
     }
 
     public static IServiceCollection AddConsoleWritter(this IServiceCollection services)

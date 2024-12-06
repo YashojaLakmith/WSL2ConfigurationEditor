@@ -5,7 +5,7 @@ using Core.Abstractions.System;
 
 namespace Core.System;
 
-public class SystemInterfacesImpl : ISystemInterfaces
+internal class SystemInterfacesImpl : ISystemInterfaces
 {
     public void RestartWslProcess()
     {

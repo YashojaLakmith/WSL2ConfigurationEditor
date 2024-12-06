@@ -202,7 +202,7 @@ public class InputParserImpl(IHelpHandler helpHandler, ISettingHandler settingHa
     {
         try
         {
-            var kvp = SplitToKeyValue(keyValueStr);
+            KeyValuePair<string, string> kvp = SplitToKeyValue(keyValueStr);
             await _settingHandler.SetSettingAsync(kvp.Key, kvp.Value, cancellationToken);
             return true;
         }
@@ -215,12 +215,7 @@ public class InputParserImpl(IHelpHandler helpHandler, ISettingHandler settingHa
 
     private static KeyValuePair<string, string> SplitToKeyValue(string str)
     {
-        var parts = str.Split(' ');
-        if (parts.Length != 2)
-        {
-            throw new InvalidOperationException(@"Invalid format.");
-        }
-
-        return KeyValuePair.Create(parts[0], parts[1]);
+        string[] parts = str.Split(' ');
+        return parts.Length != 2 ? throw new InvalidOperationException(@"Invalid format.") : KeyValuePair.Create(parts[0], parts[1]);
     }
 }

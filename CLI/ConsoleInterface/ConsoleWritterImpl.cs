@@ -10,7 +10,7 @@ public class ConsoleWritterImpl : IConsoleWritter
     public async Task WriteTableAsync(IEnumerable<EntityData> data, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var document = CreateDocument(data);
+        Document document = CreateDocument(data);
         await Console.Out.WriteLineAsync(@"");
         ConsoleRenderer.RenderDocument(document);
         await Console.Out.WriteLineAsync(@"");
@@ -38,7 +38,7 @@ public class ConsoleWritterImpl : IConsoleWritter
 
     private static Document CreateDocument(IEnumerable<EntityData> data)
     {
-        var thickness = new LineThickness(LineWidth.Double, LineWidth.Single);
+        LineThickness thickness = new(LineWidth.Double, LineWidth.Single);
 
         return new(
             new Grid()

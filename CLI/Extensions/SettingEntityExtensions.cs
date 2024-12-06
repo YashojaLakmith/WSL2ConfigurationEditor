@@ -1,5 +1,6 @@
 ﻿using CLI.DTO;
 using CLI.ServiceFactories;
+
 using Core.Abstractions.Attributes;
 using Core.Abstractions.Entity;
 using Core.Attributes;
@@ -12,12 +13,12 @@ public static class SettingEntityExtensions
     {
         try
         {
-            var extractor = DefaultServiceFactory.ResolveService<IAttributeExtracter>();
-            var settingAttr = extractor.TryExtractAttribute<SettingAttribute>(entity);
-            var osAttr = extractor.TryExtractAttribute<SupportedWindowsVersionAttribute>(entity);
+            IAttributeExtracter extractor = DefaultServiceFactory.ResolveService<IAttributeExtracter>();
+            SettingAttribute settingAttr = extractor.TryExtractAttribute<SettingAttribute>(entity);
+            SupportedWindowsVersionAttribute osAttr = extractor.TryExtractAttribute<SupportedWindowsVersionAttribute>(entity);
 
-            var value = entity.IsDefault ? @"#DEFAULT" : entity.ParseValueAsString().Replace(@"\\", @"\");
-            var section = string.Concat(settingAttr.Section[0]
+            string value = entity.IsDefault ? @"#DEFAULT" : entity.ParseValueAsString().Replace(@"\\", @"\");
+            string section = string.Concat(settingAttr.Section[0]
                 .ToString()
                 .ToUpper(), settingAttr.Section.AsSpan(1));
 

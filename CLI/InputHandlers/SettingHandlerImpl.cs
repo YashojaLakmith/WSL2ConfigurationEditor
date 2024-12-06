@@ -18,7 +18,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var settings = _localState.GetAllSettingData();
+            List<EntityData> settings = _localState.GetAllSettingData();
             await _writter.WriteTableAsync(settings, cancellationToken);
         }
         catch (InvalidOperationException ex)
@@ -32,8 +32,8 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var data = _localState.GetSettingByKey(key).AsEntityData();
-            var str = FormatString(data);
+            EntityData data = _localState.GetSettingByKey(key).AsEntityData();
+            string str = FormatString(data);
             await _writter.WriteStringAsync(str, cancellationToken);
         }
         catch (InvalidOperationException ex)
@@ -47,7 +47,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var setting = _localState.GetSettingByKey(key);
+            Core.Abstractions.Entity.ISettingEntity setting = _localState.GetSettingByKey(key);
             setting.SetDefaultValue();
         }
         catch (InvalidOperationException ex)
@@ -61,7 +61,7 @@ public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWrit
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var entity = _localState.GetSettingByKey(key);
+            Core.Abstractions.Entity.ISettingEntity entity = _localState.GetSettingByKey(key);
             entity.SetValue(value);
             await _writter.WriteStringAsync(@"Done.", cancellationToken);
         }

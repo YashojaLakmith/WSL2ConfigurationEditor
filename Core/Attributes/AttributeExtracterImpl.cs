@@ -5,7 +5,7 @@ using Core.Exceptions;
 
 namespace Core.Attributes;
 
-public class AttributeExtracterImpl : IAttributeExtracter
+internal class AttributeExtracterImpl : IAttributeExtracter
 {
     public TAttribute TryExtractAttribute<TAttribute, TTarget>() where TAttribute : Attribute
     {
