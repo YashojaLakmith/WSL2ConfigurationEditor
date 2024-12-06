@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 using Core.Abstractions.System;
 
-namespace Core.SystemInterfaces;
+namespace Core.System;
 
 public class SystemInterfacesImpl : ISystemInterfaces
 {
@@ -14,7 +14,7 @@ public class SystemInterfacesImpl : ISystemInterfaces
 
     private static void StopWsl2()
     {
-        var startInfo = new ProcessStartInfo
+        ProcessStartInfo startInfo = new()
         {
             WindowStyle = ProcessWindowStyle.Hidden,
             UseShellExecute = true,
@@ -24,7 +24,7 @@ public class SystemInterfacesImpl : ISystemInterfaces
 
         try
         {
-            using var process = new Process();
+            using Process process = new();
             process.StartInfo = startInfo;
             if (process.Start())
             {

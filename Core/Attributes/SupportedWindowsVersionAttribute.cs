@@ -8,7 +8,11 @@ public class SupportedWindowsVersionAttribute : Attribute
     private readonly int _build;
     private readonly int _revision;
 
-    public SupportedWindowsVersionAttribute(int major, int minor = 0, int build = 0, int revision = 0)
+    public SupportedWindowsVersionAttribute(
+        int major,
+        int minor = 0,
+        int build = 0,
+        int revision = 0)
     {
         _major = major;
         _minor = minor;

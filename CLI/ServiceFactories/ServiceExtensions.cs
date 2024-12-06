@@ -12,7 +12,7 @@ using Core.Abstractions.Configuration;
 using Core.Abstractions.System;
 using Core.Attributes;
 using Core.Configuration;
-using Core.SystemInterfaces;
+using Core.System;
 
 using Microsoft.Extensions.DependencyInjection;
 

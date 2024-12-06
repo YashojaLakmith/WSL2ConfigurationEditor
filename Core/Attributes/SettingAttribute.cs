@@ -9,18 +9,16 @@ public class SettingAttribute : Attribute
     public string Section { get; }
     public string CommonName { get; }
 
-    public SettingAttribute(string settingKey, SectionType sectionName, string commonName = @"")
+    public SettingAttribute(
+        string settingKey,
+        SectionType sectionName,
+        string commonName = @"")
     {
         SettingKey = settingKey;
         Section = sectionName.ToString().ToLower();
 
-        if (string.IsNullOrWhiteSpace(commonName) || commonName.Equals(string.Empty))
-        {
-            CommonName = SettingKey;
-        }
-        else
-        {
-            CommonName = commonName;
-        }
+        CommonName = string.IsNullOrWhiteSpace(commonName) || commonName.Equals(string.Empty)
+            ? SettingKey
+            : commonName;
     }
 }

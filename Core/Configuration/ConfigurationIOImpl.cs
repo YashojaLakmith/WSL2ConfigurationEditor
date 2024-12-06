@@ -10,9 +10,9 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
 
     public async Task LoadConfigurationFromFileAsync(CancellationToken cancellationToken = default)
     {
-        var lines = await _fileIO.ReadLinesFromFileAsync(cancellationToken);
+        string[] lines = await _fileIO.ReadLinesFromFileAsync(cancellationToken);
         VerifyWsl2Tag(lines);
-        var idx = FindIndexOfWsl2Tag(lines);
+        int idx = FindIndexOfWsl2Tag(lines);
         _state.LoadConfiguration(lines.Skip(idx + 1));
     }
 
@@ -38,12 +38,12 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
 
     private static void VerifyWsl2Tag(IEnumerable<string> lines)
     {
-        if(!lines.Any())
+        if (!lines.Any())
         {
             throw new InvalidDataException(@"File does not conatain valid .wslconfig data.");
         }
 
-        foreach(var line in lines)
+        foreach (string line in lines)
         {
             if (line.Equals(string.Empty))
             {
@@ -61,8 +61,8 @@ public class ConfigurationIOImpl(IConfigurationState state, IFileIO fileIO) : IC
 
     private static int FindIndexOfWsl2Tag(IEnumerable<string> lines)
     {
-        var i = 0;
-        foreach (var item in lines)
+        int i = 0;
+        foreach (string item in lines)
         {
             if (item.Equals(@"[wsl2]"))
             {

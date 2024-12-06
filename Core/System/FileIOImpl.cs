@@ -4,13 +4,13 @@ using System.Security.Principal;
 
 using Core.Abstractions.System;
 
-namespace Core.SystemInterfaces;
+namespace Core.System;
 
 public class FileIOImpl : IFileIO
 {
     public bool CheckFileExistence()
     {
-        var path = GetWslConfigWin32Path();
+        string path = GetWslConfigWin32Path();
         return File.Exists(path);
     }
 
@@ -18,7 +18,7 @@ public class FileIOImpl : IFileIO
     {
         try
         {
-            var path = GetWslConfigWin32Path();
+            string path = GetWslConfigWin32Path();
             return await File.ReadAllLinesAsync(path, cancellationToken);
         }
         catch (Exception)
@@ -29,8 +29,8 @@ public class FileIOImpl : IFileIO
 
     public bool ValidateFilePermissions()
     {
-        var path = GetWslConfigWin32Path();
-        var rules = GetAccessRulesOfThePath(path);
+        string path = GetWslConfigWin32Path();
+        List<FileSystemAccessRule> rules = GetAccessRulesOfThePath(path);
         return HasRequiredPermissions(rules);
     }
 
@@ -38,7 +38,7 @@ public class FileIOImpl : IFileIO
     {
         try
         {
-            var path = GetWslConfigWin32Path();
+            string path = GetWslConfigWin32Path();
             await File.WriteAllLinesAsync(path, lines, cancellationToken);
         }
         catch (Exception)
@@ -50,7 +50,7 @@ public class FileIOImpl : IFileIO
     public async Task CreateEmptyWslConfigFileAsync(CancellationToken cancellationToken = default)
     {
         string[] lines = [@"[wsl2]"];
-        var path = GetWslConfigWin32Path();
+        string path = GetWslConfigWin32Path();
         await File.WriteAllLinesAsync(path, lines, cancellationToken);
     }
 
@@ -63,8 +63,8 @@ public class FileIOImpl : IFileIO
     [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Apllication is exclusive to Windows platforms.")]
     private static List<FileSystemAccessRule> GetAccessRulesOfThePath(string path)
     {
-        var securityInfo = new FileInfo(path).GetAccessControl();
-        var userSid = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
+        FileSecurity securityInfo = new FileInfo(path).GetAccessControl();
+        SecurityIdentifier userSid = new(WellKnownSidType.BuiltinUsersSid, null);
 
         return securityInfo.GetAccessRules(true, true, userSid.GetType())
             .OfType<FileSystemAccessRule>()

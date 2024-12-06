@@ -10,71 +10,71 @@ namespace Core.Configuration;
 // This implementation is supposed to be used as a singleton service.
 public class ConfigurationStateImpl : IConfigurationState
 {
-    private readonly Dictionary<string, Dictionary<string, string>> _configDict;
+    private readonly Dictionary<string, Dictionary<string, string>> _configDictionary;
     private readonly IAttributeExtracter _attributeExtractor;
 
     public ConfigurationStateImpl(IAttributeExtracter attributeExtracter)
     {
-        _configDict = [];
+        _configDictionary = [];
         _attributeExtractor = attributeExtracter;
     }
 
     public void ClearState()
     {
-        lock (_configDict)
+        lock (_configDictionary)
         {
-            _configDict.Clear();
+            _configDictionary.Clear();
         }
     }
 
-    public void LoadConfiguration(IEnumerable<string> configLines)  
+    public void LoadConfiguration(IEnumerable<string> configLines)
     {
-        lock (_configDict)
+        lock (_configDictionary)
         {
-            Dictionary<string, string> subDict = [];
-            _configDict.Clear();
-            _configDict.Add(SectionAsLowecaseString(SectionType.Common), subDict);
+            Dictionary<string, string> subConfigDictionary = [];
+            _configDictionary.Clear();
+            _configDictionary.Add(SectionAsLowecaseString(SectionType.Common), subConfigDictionary);
 
-            foreach (var item in configLines)
+            foreach (string item in configLines)
             {
                 if (!IsWslConfigTag(item))
                 {
-                    ProcessLine(item, ref subDict);
+                    ProcessLine(item, ref subConfigDictionary);
                 }
             }
         }
     }
 
-    public List<string> ParseAsConfigLines()    
+    public List<string> ParseAsConfigLines()
     {
-        List<string> lines = [];
+        List<string> configurationLines = [];
 
-        lock (_configDict)
+        lock (_configDictionary)
         {
-            foreach (var subDict in _configDict)
+            foreach (KeyValuePair<string, Dictionary<string, string>> subDict in _configDictionary)
             {
                 if (!subDict.Key.Equals(SectionAsLowecaseString(SectionType.Common)))
                 {
-                    lines.Add(@$"[{subDict.Key}]");
+                    configurationLines.Add(@$"[{subDict.Key}]");
                 }
 
-                foreach (var kvp in subDict.Value)
+                foreach (KeyValuePair<string, string> kvp in subDict.Value)
                 {
-                    lines.Add($@"{kvp.Key}={kvp.Value}");
+                    configurationLines.Add($@"{kvp.Key}={kvp.Value}");
                 }
             }
         }
 
-        return lines;
+        return configurationLines;
     }
 
-    public void EraseSetting<TSetting>() where TSetting : class, ISettingEntity     // Completed
+    public void EraseSetting<TSetting>() where TSetting : class, ISettingEntity
     {
-        var settingSttr = TryGetSettingAttribute<TSetting>();
+        SettingAttribute settingSttr = TryGetSettingAttribute<TSetting>();
 
-        lock (_configDict)
+        lock (_configDictionary)
         {
-            if (!_configDict.TryGetValue(settingSttr.Section, out var subDict))
+            if (!_configDictionary.TryGetValue(settingSttr.Section, out Dictionary<string, string>? subDict))
             {
                 return;
             }
@@ -83,53 +83,53 @@ public class ConfigurationStateImpl : IConfigurationState
         }
     }
 
-    public TSetting GetSetting<TSetting>()  where TSetting : class, ISettingEntity, new()
+    public TSetting GetSetting<TSetting>() where TSetting : class, ISettingEntity, new()
     {
-        var conf = new TSetting();
-        var settingAttr = TryGetSettingAttribute<TSetting>();
+        TSetting conf = new();
+        SettingAttribute settingAttribute = TryGetSettingAttribute<TSetting>();
 
-        lock (_configDict)
+        lock (_configDictionary)
         {
-            if (!_configDict.TryGetValue(settingAttr.Section, out var subDict))
+            if (!_configDictionary.TryGetValue(settingAttribute.Section, out Dictionary<string, string>? subDict))
             {
-                throw new SettingNotFoundException(settingAttr);
+                throw new SettingNotFoundException(settingAttribute);
             }
-            if (!subDict.TryGetValue(settingAttr.SettingKey, out var value))
+            if (!subDict.TryGetValue(settingAttribute.SettingKey, out string? value))
             {
-                throw new SettingNotFoundException(settingAttr);
+                throw new SettingNotFoundException(settingAttribute);
             }
 
             conf.SetValue(value);
             return conf;
         }
-    }   
+    }
 
-    public void UpdateSetting(ISettingEntity setting) 
+    public void UpdateSetting(ISettingEntity setting)
     {
-        var settingAttr = TryGetSettingAttribute(setting);
-        var settingValue = setting.ParseValueAsString();
+        SettingAttribute settingAttribute = TryGetSettingAttribute(setting);
+        string settingValue = setting.ParseValueAsString();
 
-        lock (_configDict)
+        lock (_configDictionary)
         {
-            if (!_configDict.TryGetValue(settingAttr.Section, out var subDict))
+            if (!_configDictionary.TryGetValue(settingAttribute.Section, out Dictionary<string, string>? subDict))
             {
                 subDict = [];
-                _configDict.TryAdd(settingAttr.Section, subDict);
+                _configDictionary.TryAdd(settingAttribute.Section, subDict);
             }
 
-            if (!subDict.ContainsKey(settingAttr.SettingKey) && !setting.IsDefault)
+            if (!subDict.ContainsKey(settingAttribute.SettingKey) && !setting.IsDefault)
             {
-                subDict.TryAdd(settingAttr.SettingKey, settingValue);
+                subDict.TryAdd(settingAttribute.SettingKey, settingValue);
                 return;
             }
 
             if (setting.IsDefault)
             {
-                subDict.Remove(settingAttr.SettingKey);
+                subDict.Remove(settingAttribute.SettingKey);
                 return;
             }
 
-            subDict[settingAttr.SettingKey] = settingValue;
+            subDict[settingAttribute.SettingKey] = settingValue;
         }
     }
 
@@ -139,7 +139,7 @@ public class ConfigurationStateImpl : IConfigurationState
         {
             try
             {
-                var kvp = CreateKeyValuePair(line);
+                KeyValuePair<string, string> kvp = CreateKeyValuePair(line);
                 subDict.TryAdd(kvp.Key, kvp.Value);
             }
             catch (InvalidOperationException)
@@ -152,26 +152,23 @@ public class ConfigurationStateImpl : IConfigurationState
         if (IsValidSectionTag(line))
         {
             subDict = [];
-            var sectionName = ExtractSectionName(line);
-            _configDict.TryAdd($@"{sectionName}", subDict);
+            string sectionName = ExtractSectionName(line);
+            _configDictionary.TryAdd($@"{sectionName}", subDict);
         }
     }
 
     private static KeyValuePair<string, string> CreateKeyValuePair(ReadOnlySpan<char> line)
     {
-        var idx = line.IndexOf('=');
-        if (idx < 1)
-        {
-            throw new InvalidOperationException(@"Line cannot be parsed as a key-value pair.");
-        }
-
-        return SplitToKeyValuePair(line, idx);
+        int idx = line.IndexOf('=');
+        return idx < 1
+            ? throw new InvalidOperationException(@"Line cannot be parsed as a key-value pair.")
+            : SplitToKeyValuePair(line, idx);
     }
 
     private static string ExtractSectionName(ReadOnlySpan<char> line)
     {
-        var length = line.Length;
-        var lastIndex = length - 1;
+        int length = line.Length;
+        int lastIndex = length - 1;
         return line[1..lastIndex].ToString();
     }
 
@@ -198,8 +195,8 @@ public class ConfigurationStateImpl : IConfigurationState
 
     private static KeyValuePair<string, string> SplitToKeyValuePair(ReadOnlySpan<char> line, int index)
     {
-        var key = line[..index].ToString();
-        var value = line[(index + 1)..].ToString();
+        string key = line[..index].ToString();
+        string value = line[(index + 1)..].ToString();
 
         return KeyValuePair.Create(key, value);
     }
