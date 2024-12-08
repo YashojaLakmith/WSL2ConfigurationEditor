@@ -24,17 +24,17 @@ internal class ConfigurationIOImpl : IConfigurationIO
 
     public async Task SaveConfigurationToFileAsync(CancellationToken cancellationToken = default)
     {
-        IEnumerable<string> lines = _state.ParseAsConfigLines();
+        List<string> lines = _state.ParseAsConfigLines();
         try
         {
             VerifyWsl2Tag(lines);
         }
         catch (InvalidDataException)
         {
-            lines = lines.Prepend(@"[wsl2]");
+            lines.Insert(0, @"[wsl2]");
         }
 
-        await _fileIO.WriteLinesToFileAsync(lines.ToArray(), cancellationToken);
+        await _fileIO.WriteLinesToFileAsync([.. lines], cancellationToken);
     }
 
     public bool VerifyWslConfigExistence()
@@ -42,9 +42,9 @@ internal class ConfigurationIOImpl : IConfigurationIO
         return _fileIO.CheckFileExistence();
     }
 
-    private static void VerifyWsl2Tag(IEnumerable<string> lines)
+    private static void VerifyWsl2Tag(IReadOnlyCollection<string> lines)
     {
-        if (!lines.Any())
+        if (lines.Count == 0)
         {
             throw new InvalidDataException(@"File does not conatain valid .wslconfig data.");
         }
@@ -65,7 +65,7 @@ internal class ConfigurationIOImpl : IConfigurationIO
         }
     }
 
-    private static int FindIndexOfWsl2Tag(IEnumerable<string> lines)
+    private static int FindIndexOfWsl2Tag(IReadOnlyCollection<string> lines)
     {
         int i = 0;
         foreach (string item in lines)

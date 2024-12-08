@@ -9,5 +9,5 @@ public interface IAppLifetime
     /// Asynchronously starts the loop for user inputs and submits the inputs to the necessary services untill the application is terminated.
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the operation.</returns>
-    Task StartLoopAsync();
+    Task StartConsoleMessageLoopAsync();
 }

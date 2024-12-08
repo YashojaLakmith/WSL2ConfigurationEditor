@@ -7,7 +7,7 @@ namespace CLI.ConsoleInterface;
 
 public class ConsoleWritterImpl : IConsoleWritter
 {
-    public async Task WriteTableAsync(IEnumerable<EntityData> data, CancellationToken cancellationToken = default)
+    public async Task WriteTableAsync(IReadOnlyCollection<EntityData> data, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         Document document = CreateDocument(data);
@@ -36,7 +36,7 @@ public class ConsoleWritterImpl : IConsoleWritter
         }
     }
 
-    private static Document CreateDocument(IEnumerable<EntityData> data)
+    private static Document CreateDocument(IReadOnlyCollection<EntityData> data)
     {
         LineThickness thickness = new(LineWidth.Double, LineWidth.Single);
 

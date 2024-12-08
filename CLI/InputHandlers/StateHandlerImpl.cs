@@ -6,12 +6,20 @@ using Core.Abstractions.Configuration;
 
 namespace CLI.InputHandlers;
 
-public class StateHandlerImpl(IConfigurationIO configurationIO, IConfigurationState state, ILocalConfigurationState localState, IConsoleWritter writter) : IStateHandler
+public class StateHandlerImpl : IStateHandler
 {
-    private readonly IConfigurationIO _configurationIo = configurationIO;
-    private readonly IConfigurationState _state = state;
-    private readonly IConsoleWritter _writter = writter;
-    private readonly ILocalConfigurationState _localState = localState;
+    private readonly IConfigurationIO _configurationIo;
+    private readonly IConfigurationState _state;
+    private readonly IConsoleWritter _writter;
+    private readonly ILocalConfigurationState _localState;
+
+    public StateHandlerImpl(IConfigurationIO configurationIO, IConfigurationState state, ILocalConfigurationState localState, IConsoleWritter writter)
+    {
+        _configurationIo = configurationIO;
+        _state = state;
+        _writter = writter;
+        _localState = localState;
+    }
 
     public async Task SaveChangesToFileAsync(CancellationToken cancellationToken = default)
     {

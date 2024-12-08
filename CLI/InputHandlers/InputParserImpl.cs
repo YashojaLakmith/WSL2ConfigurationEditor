@@ -3,12 +3,20 @@ using CLI.Abstractions.InputHandlers;
 
 namespace CLI.InputHandlers;
 
-public class InputParserImpl(IHelpHandler helpHandler, ISettingHandler settingHandler, IStateHandler stateHandler, IConsoleWritter consoleWritter) : IInputParser
+public class InputParserImpl : IInputParser
 {
-    private readonly IHelpHandler _helpHandler = helpHandler;
-    private readonly ISettingHandler _settingHandler = settingHandler;
-    private readonly IStateHandler _stateHandler = stateHandler;
-    private readonly IConsoleWritter _consoleWritter = consoleWritter;
+    private readonly IHelpHandler _helpHandler;
+    private readonly ISettingHandler _settingHandler;
+    private readonly IStateHandler _stateHandler;
+    private readonly IConsoleWritter _consoleWritter;
+
+    public InputParserImpl(IHelpHandler helpHandler, ISettingHandler settingHandler, IStateHandler stateHandler, IConsoleWritter consoleWritter)
+    {
+        _helpHandler = helpHandler;
+        _settingHandler = settingHandler;
+        _stateHandler = stateHandler;
+        _consoleWritter = consoleWritter;
+    }
 
     public async Task ParseInputAsync(string input, CancellationToken cancellationToken = default)
     {

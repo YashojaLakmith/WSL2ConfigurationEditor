@@ -3,9 +3,14 @@ using CLI.Abstractions.InputHandlers;
 
 namespace CLI.InputHandlers;
 
-public class HelpHandlerImpl(IConsoleWritter consoleWritter) : IHelpHandler
+public class HelpHandlerImpl : IHelpHandler
 {
-    private readonly IConsoleWritter _consoleWritter = consoleWritter;
+    private readonly IConsoleWritter _consoleWritter;
+
+    public HelpHandlerImpl(IConsoleWritter consoleWritter)
+    {
+        _consoleWritter = consoleWritter;
+    }
 
     public async Task DisplayGenericHelpAsync(CancellationToken cancellationToken = default)
     {
