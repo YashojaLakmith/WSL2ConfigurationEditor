@@ -17,7 +17,7 @@ public class AppLifetimeImpl : IDisposable, IAppLifetime
         _writter = writter;
     }
 
-    public async Task StartLoopAsync()
+    public async Task StartConsoleMessageLoopAsync()
     {
         CancellationToken token = _tokenSource.Token;
         string? inputString;

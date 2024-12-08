@@ -8,10 +8,16 @@ using Core.Exceptions;
 
 namespace CLI.InputHandlers;
 
-public class SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWritter writter) : ISettingHandler
+public class SettingHandlerImpl : ISettingHandler
 {
-    private readonly ILocalConfigurationState _localState = localSate;
-    private readonly IConsoleWritter _writter = writter;
+    private readonly ILocalConfigurationState _localState;
+    private readonly IConsoleWritter _writter;
+
+    public SettingHandlerImpl(ILocalConfigurationState localSate, IConsoleWritter writter)
+    {
+        _localState = localSate;
+        _writter = writter;
+    }
 
     public async Task ListAllSettingDataAsync(CancellationToken cancellationToken = default)
     {

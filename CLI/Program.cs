@@ -57,6 +57,6 @@ public class Program
     private static async Task RunMessageLoopAsync()
     {
         IAppLifetime lifeTime = DefaultServiceFactory.ResolveService<IAppLifetime>();
-        await lifeTime.StartLoopAsync();
+        await lifeTime.StartConsoleMessageLoopAsync();
     }
 }
